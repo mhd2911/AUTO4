@@ -6,8 +6,10 @@ import pandas as pd
 import warnings
 warnings.filterwarnings("ignore")
 
+# تهيئة اتصال Binance
 client = Client()
 
+# رابط البوت (main.py)
 WEBHOOK_URL = "https://web-production-7810.up.railway.app/"
 
 def get_symbols():
@@ -30,7 +32,7 @@ def get_klines(symbol):
         return None
 
 def analyze(symbol):
-    print(f"Analyzing {symbol}")  # طباعة العملة التي يتم تحليلها
+    print(f"Analyzing {symbol}")
     df = get_klines(symbol)
     if df is None or len(df) < 50:
         return
@@ -43,7 +45,7 @@ def analyze(symbol):
 
     latest = df.iloc[-1]
 
-    # شرط سهل لتجربة التوصية، فقط للتأكد أن كل شيء يعمل
+    # شروط خفيفة للتجربة — غيّرها لاحقاً كما تريد
     if latest['rsi'] < 70:
         send_signal(symbol, "شراء تجريبية", latest['close'])
 
@@ -64,12 +66,13 @@ def send_signal(symbol, direction, entry):
         print(f"Failed to send signal for {symbol} - {e}")
 
 def run():
-    symbols = get_symbols()[:10]  # فقط 10 عملات للاختبار
+    symbols = get_symbols()[:10]  # 10 عملات فقط للاختبار
     for symbol in symbols:
         analyze(symbol)
 
 if __name__ == "__main__":
+    print("Analyzer started...")  # تظهر عند بدء التشغيل
     while True:
         print("Checking market...")
         run()
-        time.sleep(60)  # كل دقيقة
+        time.sleep(60)
