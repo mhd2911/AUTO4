@@ -1,4 +1,3 @@
-
 import requests
 from binance.client import Client
 import time
@@ -9,7 +8,8 @@ warnings.filterwarnings("ignore")
 
 client = Client()
 
-WEBHOOK_URL = "https://web-production-7810.up.railway.app//"
+# رابط البوت الصحيح بدون شرطة مكررة
+WEBHOOK_URL = "https://web-production-7810.up.railway.app/"
 
 def get_symbols():
     exchange_info = client.get_exchange_info()
@@ -63,7 +63,7 @@ def send_signal(symbol, direction, entry):
         print(f"Failed to send signal for {symbol} - {e}")
 
 def run():
-    symbols = get_symbols()
+    symbols = get_symbols()[:10]  # اختبر فقط أول 10 رموز مؤقتًا
     for symbol in symbols:
         analyze(symbol)
 
@@ -71,4 +71,4 @@ if __name__ == "__main__":
     while True:
         print("Checking market...")
         run()
-        time.sleep(60)
+        time.sleep(60)  # كل دقيقة
