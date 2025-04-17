@@ -8,7 +8,6 @@ warnings.filterwarnings("ignore")
 
 client = Client()
 
-# رابط البوت الصحيح بدون شرطة مكررة
 WEBHOOK_URL = "https://web-production-7810.up.railway.app/"
 
 def get_symbols():
@@ -31,6 +30,7 @@ def get_klines(symbol):
         return None
 
 def analyze(symbol):
+    print(f"Analyzing {symbol}")  # طباعة العملة التي يتم تحليلها
     df = get_klines(symbol)
     if df is None or len(df) < 50:
         return
@@ -43,8 +43,9 @@ def analyze(symbol):
 
     latest = df.iloc[-1]
 
-    if latest['rsi'] < 30 and latest['macd'] > latest['macd_signal'] and latest['close'] > latest['ma200']:
-        send_signal(symbol, "شراء", latest['close'])
+    # شرط سهل لتجربة التوصية، فقط للتأكد أن كل شيء يعمل
+    if latest['rsi'] < 70:
+        send_signal(symbol, "شراء تجريبية", latest['close'])
 
 def send_signal(symbol, direction, entry):
     target = round(entry * 1.03, 4)
@@ -63,7 +64,7 @@ def send_signal(symbol, direction, entry):
         print(f"Failed to send signal for {symbol} - {e}")
 
 def run():
-    symbols = get_symbols()[:10]  # اختبر فقط أول 10 رموز مؤقتًا
+    symbols = get_symbols()[:10]  # فقط 10 عملات للاختبار
     for symbol in symbols:
         analyze(symbol)
 
