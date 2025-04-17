@@ -1,4 +1,3 @@
-
 from flask import Flask, request
 import requests
 
@@ -29,9 +28,10 @@ def send_signal():
         "text": message,
         "parse_mode": "Markdown"
     }
+
     response = requests.post(url, data=payload)
-print("Telegram status:", response.status_code)
-print("Telegram response:", response.text)
+    print("Telegram status:", response.status_code)
+    print("Telegram response:", response.text)
     return "OK"
 
 @app.route('/', methods=['GET'])
