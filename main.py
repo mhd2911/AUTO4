@@ -29,7 +29,9 @@ def send_signal():
         "text": message,
         "parse_mode": "Markdown"
     }
-    requests.post(url, data=payload)
+    response = requests.post(url, data=payload)
+print("Telegram status:", response.status_code)
+print("Telegram response:", response.text)
     return "OK"
 
 @app.route('/', methods=['GET'])
